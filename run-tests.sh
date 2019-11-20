@@ -2,7 +2,7 @@
 
 set -e
 
-failed=0
+failed=()
 
 for x in *.sh; do
 	case ${x} in
@@ -15,10 +15,10 @@ for x in *.sh; do
 	esac
 
 	echo ">>> ${x}"
-	"./${x}" || : $(( failed++ ))
+	"./${x}" || failed+=( "${x}" )
 done
 
-if [[ ${failed} -gt 0 ]]; then
-	echo "${failed} tests failed" >&2
+if [[ -n ${failed[@]} ]]; then
+	echo "${#failed[@]} tests failed: ${failed[*]}" >&2
 	exit 1
 fi
