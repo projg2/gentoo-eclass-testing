@@ -1,6 +1,7 @@
-FROM gentoo/portage:latest AS repo
 FROM gentoo/stage3-amd64:latest
-COPY --from=repo /var/db/repos/gentoo/eclass /var/db/repos/gentoo/eclass
+WORKDIR /var/db/repos/gentoo
+RUN ["wget", "--progress=dot:mega", "https://github.com/gentoo/gentoo/archive/master.tar.gz"]
+RUN ["tar", "-xf", "master.tar.gz", "--strip-components=1", "gentoo-master/eclass"]
 WORKDIR /var/db/repos/gentoo/eclass/tests
 COPY . /var/db/repos/gentoo/eclass/tests
 RUN ["./run-tests.sh"]
